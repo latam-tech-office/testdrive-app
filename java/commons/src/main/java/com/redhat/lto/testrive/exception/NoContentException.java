@@ -21,16 +21,28 @@ import java.io.Serializable;
 import java.util.logging.Logger;
 
 /**
- * An Exception means 
+ * There is no Content to be deliver
  *
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-public class NoContentException implements Serializable {
-
-    private static final Logger LOG = Logger.getLogger(NoContentException.class.getName());
-    private static final long serialVersionUID = -7183998893296013462L;
+public class NoContentException extends Exception {
 
     public NoContentException() {
     }
 
+    public NoContentException(String message) {
+        super(message);
+    }
+
+    public NoContentException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public NoContentException(Throwable cause) {
+        super(cause);
+    }
+
+    public NoContentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
+    }
 }

@@ -20,6 +20,7 @@ package com.redhat.lto.testdrive.resource;
 import com.mongodb.client.MongoCollection;
 import com.redhat.lto.testdrive.model.Survey;
 import com.redhat.lto.testdrive.setup.MongoProvider;
+import com.redhat.lto.testrive.exception.NoContentException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,12 +49,13 @@ public class SurveyResource implements Serializable {
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response all() {
+    public Response all() throws NoContentException // 204 - No Content
+            {
         Collection<Survey> all = new ArrayList<>();
         
         // There is no content available
         if(all.isEmpty())
-            return Response.status(Response.Status.NO_CONTENT).build();
+            throw new NoContentException("Survey data is empty");
         
         GenericEntity<Collection<Survey>> result = 
                 new GenericEntity<Collection<Survey>>(all){};

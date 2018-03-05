@@ -15,10 +15,9 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testdrive.model.survey;
+package com.redhat.lto.testdrive.model;
 
 import com.redhat.lto.testdrive.JSON;
-
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.logging.Logger;
@@ -30,31 +29,30 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Represents an answer from a Question within a Survey
+ * A question within a Survey
  * 
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-@XmlRootElement(name="answer")
+@XmlRootElement(name="question")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Answer implements Serializable, JSON {
+public class Question implements Serializable, JSON {
 
-    private static final Logger LOG = Logger.getLogger(Answer.class.getName());
-    private static final long serialVersionUID = 882893370538053242L;
-    
+    private static final Logger LOG = Logger.getLogger(Question.class.getName());
+
     public static final String TAG_ORDER = "order";
     @XmlElement(name = TAG_ORDER, nillable = false, required = true)
     private int order;
     
-    public static final String TAG_ANSWER = "answer";
-    @XmlElement(name = TAG_ANSWER, nillable = false, required = true)
-    private String answer;
+    public static final String TAG_QUESTION = "question";
+    @XmlElement(name = TAG_QUESTION, nillable = false, required = true)
+    private String question;
 
-    public Answer() {
+    public Question() {
     }
 
-    public Answer(int order, String answer) {
+    public Question(int order, String question) {
         this.order = order;
-        this.answer = answer;
+        this.question = question;
     }
 
     public int getOrder() {
@@ -65,19 +63,19 @@ public class Answer implements Serializable, JSON {
         this.order = order;
     }
 
-    public String getAnswer() {
-        return answer;
+    public String getQuestion() {
+        return question;
     }
 
-    public void setAnswer(String answer) {
-        this.answer = answer;
+    public void setQuestion(String question) {
+        this.question = question;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 37 * hash + this.order;
-        hash = 37 * hash + Objects.hashCode(this.answer);
+        int hash = 3;
+        hash = 13 * hash + this.order;
+        hash = 13 * hash + Objects.hashCode(this.question);
         return hash;
     }
 
@@ -92,16 +90,16 @@ public class Answer implements Serializable, JSON {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Answer other = (Answer) obj;
+        final Question other = (Question) obj;
         if (this.order != other.order) {
             return false;
         }
-        if (!Objects.equals(this.answer, other.answer)) {
+        if (!Objects.equals(this.question, other.question)) {
             return false;
         }
         return true;
     }
-   
+    
     @Override
     public String toString() {
         return toJSON().build().toString();
@@ -116,7 +114,6 @@ public class Answer implements Serializable, JSON {
     public JsonObjectBuilder toJSON() {
         return Json.createObjectBuilder()
                 .add(TAG_ORDER, this.order)
-                .add(TAG_ANSWER, this.answer);
-    }    
-
+                .add(TAG_QUESTION, this.question);
+    }
 }

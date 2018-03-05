@@ -55,8 +55,8 @@ public class Session implements Serializable {
     @XmlElement(name = TAG_ATTENDEES, nillable = true)
     private Attendee[] attendees;
     
-    private Survey preSurvey;
-    private Survey postSurvey;
+//    private Survey preSurvey;
+//    private Survey postSurvey;
 
     public Session() {
     }

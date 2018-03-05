@@ -18,8 +18,6 @@
 package com.redhat.lto.testdrive.model;
 
 import com.redhat.lto.testdrive.JSON;
-import com.redhat.lto.testdrive.model.survey.Answer;
-import com.redhat.lto.testdrive.model.survey.Question;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Objects;
