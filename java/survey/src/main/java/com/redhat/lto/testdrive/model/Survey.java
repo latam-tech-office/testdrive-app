@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bson.types.ObjectId;
 
 /**
  * A specific Survey to gather data from customers 
@@ -42,6 +43,10 @@ public class Survey implements Serializable, JSON {
     private static final long serialVersionUID = -5847791377362246378L;
     
     public static final String COLLECTION = "surveys";
+    
+    public static final String TAG_ID = "_id";
+    @XmlElement(name = TAG_ID, nillable = true, required = false)
+    private ObjectId ID;    
     
     public static final String TAG_NAME = "name";
     @XmlElement(name = TAG_NAME, nillable = false, required = true)
@@ -62,6 +67,14 @@ public class Survey implements Serializable, JSON {
         this.name = name;
         this.question = question;
         this.answers = answers;
+    }
+
+    public ObjectId getID() {
+        return ID;
+    }
+
+    public void setID(ObjectId ID) {
+        this.ID = ID;
     }
 
     public String getName() {
@@ -92,6 +105,7 @@ public class Survey implements Serializable, JSON {
     @Override
     public int hashCode() {
         int hash = 7;
+        hash = 97 * hash + Objects.hashCode(this.ID);
         hash = 97 * hash + Objects.hashCode(this.name);
         hash = 97 * hash + Objects.hashCode(this.question);
         hash = 97 * hash + Arrays.deepHashCode(this.answers);
@@ -110,6 +124,9 @@ public class Survey implements Serializable, JSON {
             return false;
         }
         final Survey other = (Survey) obj;
+        if (!Objects.equals(this.ID, other.ID)) {
+            return false;
+        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
@@ -135,7 +152,10 @@ public class Survey implements Serializable, JSON {
      * @return JsonObject that represents this object */
     @Override
     public JsonObjectBuilder toJSON() {
-        return Json.createObjectBuilder()
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        if(this.ID != null) builder.add(TAG_ID, this.ID);
+        
+        return builder.                
                 .add(TAG_NAME, this.name)
                 .add(TAG_QUESTION, this.question.toJSON());
         // PENDING: Answers as Array
