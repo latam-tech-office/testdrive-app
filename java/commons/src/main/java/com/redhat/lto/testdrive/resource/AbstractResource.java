@@ -22,10 +22,10 @@ import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
 import com.redhat.lto.testdrive.MongoType;
 import com.redhat.lto.testdrive.setup.MongoProvider;
-import com.redhat.lto.testrive.exception.MissingInformationException;
-import com.redhat.lto.testrive.exception.NoContentException;
-import com.redhat.lto.testrive.exception.NotFoundException;
-import com.redhat.lto.testrive.exception.ServiceUnavailableException;
+import com.redhat.lto.testdrive.exception.MissingInformationException;
+import com.redhat.lto.testdrive.exception.NoContentException;
+import com.redhat.lto.testdrive.exception.NotFoundException;
+import com.redhat.lto.testdrive.exception.ServiceUnavailableException;
 
 import java.io.Serializable;
 import java.util.ArrayList;
