@@ -15,7 +15,7 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testrive.exception;
+package com.redhat.lto.testdrive.exception;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

@@ -15,31 +15,27 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testrive.exception;
+package com.redhat.lto.testdrive.exception;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
- * There is no Content to be deliver
- *
+ * HTTP Code 204 - No Content
+ * 
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-public class NoContentException extends Exception {
+@Provider
+public class NoContentExceptionMapper implements ExceptionMapper<NoContentException> {
 
-    public NoContentException() {
-    }
+    private static final Logger LOG = Logger.getLogger(NoContentExceptionMapper.class.getName());
 
-    public NoContentException(String message) {
-        super(message);
-    }
-
-    public NoContentException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public NoContentException(Throwable cause) {
-        super(cause);
-    }
-
-    public NoContentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
+    @Override
+    public Response toResponse(NoContentException ex) {
+        LOG.log(Level.INFO, "### 204 - NoContentException: {0}", ex.getMessage());
+        return Response.status(Response.Status.NO_CONTENT).build();
     }
 }

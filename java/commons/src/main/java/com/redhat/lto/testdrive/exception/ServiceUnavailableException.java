@@ -15,27 +15,31 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testrive.exception;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+package com.redhat.lto.testdrive.exception;
 
 /**
- * HTTP Code 204 - No Content
+ * Something failed in the service
  * 
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-@Provider
-public class NoContentExceptionMapper implements ExceptionMapper<NoContentException> {
+public class ServiceUnavailableException extends Exception {
 
-    private static final Logger LOG = Logger.getLogger(NoContentExceptionMapper.class.getName());
+    public ServiceUnavailableException() {
+    }
 
-    @Override
-    public Response toResponse(NoContentException ex) {
-        LOG.log(Level.INFO, "### 204 - NoContentException: {0}", ex.getMessage());
-        return Response.status(Response.Status.NO_CONTENT).build();
+    public ServiceUnavailableException(String message) {
+        super(message);
+    }
+
+    public ServiceUnavailableException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public ServiceUnavailableException(Throwable cause) {
+        super(cause);
+    }
+
+    public ServiceUnavailableException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

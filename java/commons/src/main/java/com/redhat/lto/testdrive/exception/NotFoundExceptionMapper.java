@@ -15,31 +15,33 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testrive.exception;
+package com.redhat.lto.testdrive.exception;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
- * Something failed in the service
- * 
+ * JAX-RS Mapper for NotFoundException
+ * 404 - Not Found
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-public class ServiceUnavailableException extends Exception {
+@Provider
+public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
 
-    public ServiceUnavailableException() {
+    private static final Logger LOG = Logger.getLogger(NotFoundExceptionMapper.class.getName());
+
+    public NotFoundExceptionMapper() {
     }
 
-    public ServiceUnavailableException(String message) {
-        super(message);
+    @Override
+    public Response toResponse(NotFoundException ex) {
+        LOG.log(Level.INFO, "### NotFoundException: {0}", ex.getMessage());
+        return Response.status(Response.Status.NOT_FOUND).build();
     }
+    
+    
 
-    public ServiceUnavailableException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ServiceUnavailableException(Throwable cause) {
-        super(cause);
-    }
-
-    public ServiceUnavailableException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
-    }
 }

@@ -15,30 +15,31 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testrive.exception;
+package com.redhat.lto.testdrive.exception;
 
 /**
- * Indicates something wasn't found 
+ * There is no Content to be deliver
+ *
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-public class NotFoundException extends Exception {
+public class NoContentException extends Exception {
 
-    public NotFoundException() {
+    public NoContentException() {
     }
 
-    public NotFoundException(String message) {
+    public NoContentException(String message) {
         super(message);
     }
 
-    public NotFoundException(String message, Throwable cause) {
+    public NoContentException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public NotFoundException(Throwable cause) {
+    public NoContentException(Throwable cause) {
         super(cause);
     }
 
-    public NotFoundException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public NoContentException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

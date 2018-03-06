@@ -1,4 +1,4 @@
-package com.redhat.lto.testrive.exception;
+package com.redhat.lto.testdrive.exception;
 
 /**
  * There were some missing Information
