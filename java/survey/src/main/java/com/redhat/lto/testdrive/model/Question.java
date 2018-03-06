@@ -53,6 +53,10 @@ public class Question implements Serializable, JSON, MongoType<Question> {
     @XmlElement(name = TAG_QUESTION, nillable = false, required = true)
     private String question;
     
+    public static final String TAG_QUESTION_TYPE = "type";
+    @XmlElement(name = TAG_QUESTION_TYPE, nillable = false, required = true)
+    private QuestionType type;
+    
     public static final String TAG_ANSWERS = "answers";
     @XmlElement(name = TAG_ANSWERS, nillable = false, required = true)
     private Answer[] answers;    
@@ -60,9 +64,10 @@ public class Question implements Serializable, JSON, MongoType<Question> {
     public Question() {
     }
 
-    public Question(int order, String question, Answer[] answers) {
+    public Question(int order, String question, QuestionType type, Answer[] answers) {
         this.order = order;
         this.question = question;
+        this.type = type;
         this.answers = answers;
     }
 
@@ -82,6 +87,14 @@ public class Question implements Serializable, JSON, MongoType<Question> {
         this.question = question;
     }
 
+    public QuestionType getType() {
+        return type;
+    }
+
+    public void setType(QuestionType type) {
+        this.type = type;
+    }
+
     public Answer[] getAnswers() {
         return answers;
     }
@@ -93,9 +106,10 @@ public class Question implements Serializable, JSON, MongoType<Question> {
     @Override
     public int hashCode() {
         int hash = 3;
-        hash = 17 * hash + this.order;
-        hash = 17 * hash + Objects.hashCode(this.question);
-        hash = 17 * hash + Arrays.deepHashCode(this.answers);
+        hash = 29 * hash + this.order;
+        hash = 29 * hash + Objects.hashCode(this.question);
+        hash = 29 * hash + Objects.hashCode(this.type);
+        hash = 29 * hash + Arrays.deepHashCode(this.answers);
         return hash;
     }
 
@@ -115,6 +129,9 @@ public class Question implements Serializable, JSON, MongoType<Question> {
             return false;
         }
         if (!Objects.equals(this.question, other.question)) {
+            return false;
+        }
+        if (this.type != other.type) {
             return false;
         }
         if (!Arrays.deepEquals(this.answers, other.answers)) {
@@ -137,7 +154,8 @@ public class Question implements Serializable, JSON, MongoType<Question> {
     public JsonObjectBuilder toJSON() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         builder.add(TAG_ORDER, this.order)
-                .add(TAG_QUESTION, this.question);
+                .add(TAG_QUESTION, this.question)
+                .add(TAG_QUESTION_TYPE, this.type.toString());
         
         // Assuming answers are NOT null
         if(this.answers != null && this.answers.length > 0) {
@@ -156,7 +174,8 @@ public class Question implements Serializable, JSON, MongoType<Question> {
     public Document toDocument() {
         Document document = new Document();
         document.append(TAG_ORDER, this.order)
-                .append(TAG_QUESTION, this.question);
+                .append(TAG_QUESTION, this.question)
+                .append(TAG_QUESTION_TYPE, this.type.toString());
         
         if(this.answers != null && this.answers.length > 0) {
             List<Document> arrayAnswers = new ArrayList<>(this.answers.length);
@@ -172,6 +191,7 @@ public class Question implements Serializable, JSON, MongoType<Question> {
     public void fromDocument(Document document) {
         setOrder(document.getInteger(TAG_ORDER, this.order));
         setQuestion(document.getString(TAG_QUESTION));
+        setType(QuestionType.valueOf(document.getString(TAG_QUESTION_TYPE)));
         
         List<Document> arrayAnswers = (List<Document>)document.get(TAG_ANSWERS);
         if(arrayAnswers != null && !arrayAnswers.isEmpty()) {

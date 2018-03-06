@@ -15,30 +15,19 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testdrive.resource;
+package com.redhat.lto.testdrive.model;
 
-import java.io.Serializable;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.core.Response;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlType;
 
 /**
- * A simple ping resource to make sure the application is running
- * It's also used to get Kubernetes/OpenShift this application is 
- * responding properly
  *
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-@Path("/ping")
-public class PingResource implements Serializable {
+@XmlType(name = "type")
+@XmlEnum
+public enum QuestionType {
 
-    private static final Logger LOG = Logger.getLogger(PingResource.class.getName());
-    private static final long serialVersionUID = -1586478475751740469L;
+    SINGLE, MULTIPLE, RANK, OPEN
 
-    @GET
-    public Response ping() {
-        return Response.ok().build();
-    }
 }

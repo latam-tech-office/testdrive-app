@@ -54,13 +54,13 @@ public class SurveyTest {
         Answer answer1 = new Answer(1, "John");
         Answer answer2 = new Answer(2, "Melany");
         Answer answer3 = new Answer(3, "Paul");
-        Question question1 = new Question(1, "What is your name ?",
+        Question question1 = new Question(1, "What is your name ?", QuestionType.SINGLE,
             new Answer[] {answer1, answer2, answer3});
         
         
         Answer answer4 = new Answer(1, "Male");
         Answer answer5 = new Answer(2, "Female");
-        Question question2 = new Question(2, "What is your sex ?",
+        Question question2 = new Question(2, "What is your sex ?", QuestionType.RANK,
                 new Answer[] {answer4, answer5});
         
         Survey survey = new Survey("Basic Question", new Question[] { question1, question2 });
