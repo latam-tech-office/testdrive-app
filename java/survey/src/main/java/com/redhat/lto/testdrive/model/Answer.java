@@ -18,6 +18,7 @@
 package com.redhat.lto.testdrive.model;
 
 import com.redhat.lto.testdrive.JSON;
+import com.redhat.lto.testdrive.MongoType;
 
 import java.io.Serializable;
 import java.util.Objects;
@@ -29,6 +30,8 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import org.bson.Document;
+
 /**
  * Represents an answer from a Question within a Survey
  * 
@@ -36,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @XmlRootElement(name="answer")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Answer implements Serializable, JSON {
+public class Answer implements Serializable, JSON, MongoType<Answer> {
 
     private static final Logger LOG = Logger.getLogger(Answer.class.getName());
     private static final long serialVersionUID = 882893370538053242L;
@@ -118,5 +121,21 @@ public class Answer implements Serializable, JSON {
                 .add(TAG_ORDER, this.order)
                 .add(TAG_ANSWER, this.answer);
     }    
+    
+    
+    // MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO
+    //   MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO    
+    /**
+     * Convert a object into a Mongo's DOcument */
+    public Document toDocument() {
+        return new Document().append(TAG_ORDER, this.order)
+                .append(TAG_ANSWER, this.answer);
+    }
 
+    /**
+     * Returns a object based on a Document */
+    public void fromDocument(Document document) {
+        setOrder(document.getInteger(TAG_ORDER, 0));
+        setAnswer(document.getString(TAG_ANSWER));
+    }
 }

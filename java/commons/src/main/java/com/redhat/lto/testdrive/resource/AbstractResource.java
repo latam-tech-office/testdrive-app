@@ -20,11 +20,13 @@ package com.redhat.lto.testdrive.resource;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.UpdateResult;
+import com.redhat.lto.testdrive.MongoType;
 import com.redhat.lto.testdrive.setup.MongoProvider;
 import com.redhat.lto.testrive.exception.MissingInformationException;
 import com.redhat.lto.testrive.exception.NoContentException;
 import com.redhat.lto.testrive.exception.NotFoundException;
 import com.redhat.lto.testrive.exception.ServiceUnavailableException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,6 +44,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+
 import org.bson.Document;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
@@ -51,9 +54,10 @@ import org.bson.types.ObjectId;
  * 
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-public abstract class AbstractResource<T> implements Serializable {
+public abstract class AbstractResource<T extends MongoType> implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(AbstractResource.class.getName());
+    private static final long serialVersionUID = -1144113959173611896L;    
 
     @EJB
     protected MongoProvider provider;
@@ -65,7 +69,10 @@ public abstract class AbstractResource<T> implements Serializable {
         
         Collection<T> all = new ArrayList<>();
         for(Document document: getCollection().find().sort(sort()))
-            all.add(fromDocument(document));
+            all.add(newInstance(document));
+        
+        // No Content found 
+        if(all.isEmpty()) throw new NoContentException("No surveys found");
         
         GenericEntity<Collection<T>> result = 
                 new GenericEntity<Collection<T>>(all){};
@@ -73,8 +80,8 @@ public abstract class AbstractResource<T> implements Serializable {
         return Response.ok(result).build();
     }
     
-    @PathParam("/{ID}")
-    @GET
+    
+    @GET @Path("/{ID}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response fetchByID(@PathParam("ID")String ID) throws NotFoundException {
         Document document = new Document().append("_id",new ObjectId(ID));
@@ -84,14 +91,14 @@ public abstract class AbstractResource<T> implements Serializable {
         if(found == null) 
             throw new NotFoundException("_ID "+ID+" not found");
         
-        return Response.ok(fromDocument(found), MediaType.APPLICATION_JSON).build();
+        return Response.ok(newInstance(found), MediaType.APPLICATION_JSON).build();
     }
     
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(T t) throws ServiceUnavailableException {
-        Document document = toDocument(t); 
+        Document document = t.toDocument();
         getCollection().insertOne(document); 
         LOG.log(Level.INFO, ">>> create() {0}", document.toJson());
         LOG.log(Level.INFO, ">>> ObjectID: HEX:{0} String:{1}", new Object[] {
@@ -113,12 +120,12 @@ public abstract class AbstractResource<T> implements Serializable {
                          throws NotFoundException, MissingInformationException {
         // Is there any Person to work with ?
         if(t == null) 
-            throw new MissingInformationException("No Person were found");
+            throw new MissingInformationException("No objects were found");
         
         Document found = fetchByObjectId(ID);
         
         UpdateResult result = getCollection().updateOne(found, 
-                                    new Document("$set", toDocument(t)));
+                                    new Document("$set", t.toDocument()));
         if(result.getModifiedCount() == 0)
             return Response.status(Response.Status.GONE).build();
         
@@ -150,14 +157,10 @@ public abstract class AbstractResource<T> implements Serializable {
     
     // ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT 
     //  ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT ABSTRACT 
-
+    
     /**
-     * Convert a object into a Mongo's DOcument */
-    public abstract Document toDocument(T t);
-
-    /**
-     * Returns a object based on a Document */
-    public abstract T fromDocument(Document document);
+     * Returns a factory of creating a new instance */
+    public abstract T newInstance(Document document);
     
     /**
      * Returns the way to sort the data out */

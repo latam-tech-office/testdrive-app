@@ -15,27 +15,26 @@
  * limitations under the License.
  * 
  */
-package com.redhat.lto.testrive.exception;
+package com.redhat.lto.testdrive;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.ExceptionMapper;
-import javax.ws.rs.ext.Provider;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
- * HTTP Code 204 - No Content
+ * It guarantees the POJO has all the necessary methods to handle
+ * data in and out of Mongo Database 
  * 
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
-@Provider
-public class NoContentExceptionMapper implements ExceptionMapper<NoContentException> {
+public interface MongoType<T> {
 
-    private static final Logger LOG = Logger.getLogger(NoContentExceptionMapper.class.getName());
+    /**
+     * Convert a object into a Mongo's DOcument */
+    public Document toDocument();
 
-    @Override
-    public Response toResponse(NoContentException ex) {
-        LOG.log(Level.INFO, "### 204 - NoContentException: {0}", ex.getMessage());
-        return Response.status(Response.Status.NO_CONTENT).build();
-    }
+    /**
+     * Returns a object based on a Document */
+    public void fromDocument(Document document);
 }

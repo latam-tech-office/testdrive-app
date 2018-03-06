@@ -18,21 +18,17 @@
 package com.redhat.lto.testdrive.resource;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Sorts;
 import com.redhat.lto.testdrive.model.Survey;
-import com.redhat.lto.testdrive.setup.MongoProvider;
-import com.redhat.lto.testrive.exception.NoContentException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ejb.EJB;
-import javax.ws.rs.GET;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.GenericEntity;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  * Resource in charge of handling surveys for the whole system
@@ -40,32 +36,28 @@ import org.bson.Document;
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
 @Path("/v1/survey")
-public class SurveyResource implements Serializable {
+public class SurveyResource extends AbstractResource<Survey> {
 
     private static final Logger LOG = Logger.getLogger(SurveyResource.class.getName());
-
-    @EJB
-    private MongoProvider provider;    
     
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response all() throws NoContentException // 204 - No Content
-            {
-        Collection<Survey> all = new ArrayList<>();
+    /**
+     * Returns a factory of creating a new instance */
+    public Survey newInstance(Document document) {
+        Survey newSurvey = new Survey();
+        newSurvey.fromDocument(document);
         
-        // There is no content available
-        if(all.isEmpty())
-            throw new NoContentException("Survey data is empty");
-        
-        GenericEntity<Collection<Survey>> result = 
-                new GenericEntity<Collection<Survey>>(all){};
-        
-        
-        
-        return Response.ok().build();
+        return newSurvey;
     }
     
-    private MongoCollection<Document> getCollection() {
+    /**
+     * Returns the way to sort the data out */
+    public Bson sort() {
+        return Sorts.ascending(Survey.TAG_NAME);
+    }
+    
+    /**
+     * Returns the name of the Collection */
+    public MongoCollection<Document> getCollection() {
         return provider.getDatabase().getCollection(Survey.COLLECTION);
     }
 }

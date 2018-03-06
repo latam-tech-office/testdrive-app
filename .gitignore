@@ -25,3 +25,6 @@
 hs_err_pid*
 /target/
 /java/target/
+/java/commons/target/
+/java/survey/target/
+/java/survey/nbproject/

@@ -4,11 +4,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
  * 400: Bad Request
  * @author Mauricio "Maltron" Leal <maltron at gmail dot com>
  */
+@Provider
 public class MissingInformationExceptionMapper implements ExceptionMapper<MissingInformationException> {
 
     private static final Logger LOG = Logger.getLogger(MissingInformationExceptionMapper.class.getName());

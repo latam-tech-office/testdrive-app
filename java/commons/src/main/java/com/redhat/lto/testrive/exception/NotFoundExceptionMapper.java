@@ -21,12 +21,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
  * JAX-RS Mapper for NotFoundException
  * 404 - Not Found
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
+@Provider
 public class NotFoundExceptionMapper implements ExceptionMapper<NotFoundException> {
 
     private static final Logger LOG = Logger.getLogger(NotFoundExceptionMapper.class.getName());

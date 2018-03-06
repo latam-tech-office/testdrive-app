@@ -17,9 +17,6 @@
  */
 package com.redhat.lto.testrive.exception;
 
-import java.io.Serializable;
-import java.util.logging.Logger;
-
 /**
  * There is no Content to be deliver
  *

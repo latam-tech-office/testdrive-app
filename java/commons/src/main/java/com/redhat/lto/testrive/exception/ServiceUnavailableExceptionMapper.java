@@ -21,12 +21,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.ExceptionMapper;
+import javax.ws.rs.ext.Provider;
 
 /**
  * Something happens during the 
  * 503 - Service Unavailable 
  * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
+@Provider
 public class ServiceUnavailableExceptionMapper implements ExceptionMapper<ServiceUnavailableException> {
 
     private static final Logger LOG = Logger.getLogger(ServiceUnavailableExceptionMapper.class.getName());

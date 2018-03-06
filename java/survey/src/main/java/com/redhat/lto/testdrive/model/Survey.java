@@ -18,16 +18,21 @@
 package com.redhat.lto.testdrive.model;
 
 import com.redhat.lto.testdrive.JSON;
+import com.redhat.lto.testdrive.MongoType;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Logger;
 import javax.json.Json;
+import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.bson.Document;
 import org.bson.types.ObjectId;
 
 /**
@@ -37,7 +42,7 @@ import org.bson.types.ObjectId;
  */
 @XmlRootElement(name="survey")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class Survey implements Serializable, JSON {
+public class Survey implements Serializable, JSON, MongoType<Survey> {
 
     private static final Logger LOG = Logger.getLogger(Survey.class.getName());
     private static final long serialVersionUID = -5847791377362246378L;
@@ -52,21 +57,16 @@ public class Survey implements Serializable, JSON {
     @XmlElement(name = TAG_NAME, nillable = false, required = true)
     private String name;
 
-    public static final String TAG_QUESTION = "question";
-    @XmlElement(name = TAG_QUESTION, nillable = false, required = true)
-    private Question question;
+    public static final String TAG_QUESTIONS = "questions";
+    @XmlElement(name = TAG_QUESTIONS, nillable = false, required = true)
+    private Question[] questions;
     
-    public static final String TAG_ANSWERS = "answers";
-    @XmlElement(name = TAG_ANSWERS, nillable = false, required = true)
-    private Answer[] answers;
-
     public Survey() {
     }
 
-    public Survey(String name, Question question, Answer[] answers) {
+    public Survey(String name, Question[] questions) {
         this.name = name;
-        this.question = question;
-        this.answers = answers;
+        this.questions = questions;
     }
 
     public ObjectId getID() {
@@ -84,31 +84,21 @@ public class Survey implements Serializable, JSON {
     public void setName(String name) {
         this.name = name;
     }
-    
 
-    public Question getQuestion() {
-        return question;
+    public Question[] getQuestions() {
+        return questions;
     }
 
-    public void setQuestion(Question question) {
-        this.question = question;
-    }
-
-    public Answer[] getAnswers() {
-        return answers;
-    }
-
-    public void setAnswers(Answer[] answers) {
-        this.answers = answers;
+    public void setQuestions(Question[] questions) {
+        this.questions = questions;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
+        int hash = 5;
         hash = 97 * hash + Objects.hashCode(this.ID);
         hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Objects.hashCode(this.question);
-        hash = 97 * hash + Arrays.deepHashCode(this.answers);
+        hash = 97 * hash + Arrays.deepHashCode(this.questions);
         return hash;
     }
 
@@ -124,21 +114,17 @@ public class Survey implements Serializable, JSON {
             return false;
         }
         final Survey other = (Survey) obj;
-        if (!Objects.equals(this.ID, other.ID)) {
-            return false;
-        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
-        if (!Objects.equals(this.question, other.question)) {
+        if (!Objects.equals(this.ID, other.ID)) {
             return false;
         }
-        if (!Arrays.deepEquals(this.answers, other.answers)) {
+        if (!Arrays.deepEquals(this.questions, other.questions)) {
             return false;
         }
         return true;
     }
-    
     
     @Override
     public String toString() {
@@ -153,12 +139,50 @@ public class Survey implements Serializable, JSON {
     @Override
     public JsonObjectBuilder toJSON() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
-        if(this.ID != null) builder.add(TAG_ID, this.ID);
+        if(this.ID != null) builder.add(TAG_ID, this.ID.toHexString());
+        builder.add(TAG_NAME, this.name);
         
-        return builder.                
-                .add(TAG_NAME, this.name)
-                .add(TAG_QUESTION, this.question.toJSON());
-        // PENDING: Answers as Array
-                
+        if(this.questions != null && this.questions.length > 0) {
+            JsonArrayBuilder array = Json.createArrayBuilder();
+            for(Question question: this.questions) array.add(question.toJSON());
+            builder.add(TAG_QUESTIONS, array);
+        }
+        
+        return builder;
+    }
+    
+    // MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO
+    //   MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO    
+    /**
+     * Convert a object into a Mongo's DOcument */
+    public Document toDocument() {
+        Document document = new Document();
+        if(this.ID != null) document.append(TAG_ID, this.ID);
+        document.append(TAG_NAME, this.name);
+        
+        if(this.questions != null && this.questions.length > 0) {
+            List<Document> arrayQuestions = new ArrayList<>(this.questions.length);
+            for(Question question: this.questions) arrayQuestions.add(question.toDocument());
+            document.append(TAG_QUESTIONS, arrayQuestions);
+        }
+        
+        return document;
+    }
+
+    /**
+     * Returns a object based on a Document */
+    public void fromDocument(Document document) {
+        this.ID = document.getObjectId(TAG_ID);
+        this.name = document.getString(TAG_NAME);
+        
+        List<Document> arrayQuestions = (List<Document>)document.get(TAG_QUESTIONS);
+        if(arrayQuestions != null && !arrayQuestions.isEmpty()) {
+            Question[] questions = new Question[arrayQuestions.size()];
+            for(int i=0; i < arrayQuestions.size(); i++) {
+                questions[i] = new Question();
+                questions[i].fromDocument(arrayQuestions.get(i));
+            }
+            setQuestions(questions);
+        }
     }
 }
