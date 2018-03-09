@@ -9,12 +9,12 @@
 import UIKit
 
 class SurveyJSON: Codable {
-    let id: String
+    let _id: String
     let name: String
     let questions: [QuestionJSON]
     
-    init(id: String, name: String, questions: [QuestionJSON]) {
-        self.id = id
+    init(_id: String, name: String, questions: [QuestionJSON]) {
+        self._id = _id
         self.name = name
         self.questions = questions
     }
@@ -35,10 +35,10 @@ class QuestionJSON: Codable {
 }
 
 enum QuestionType: String, Codable {
-    case single
-    case multiple
-    case rank
-    case open
+    case single = "SINGLE"
+    case multiple = "MULTIPLE"
+    case rank = "RANK"
+    case open = "OPEN"
 }
 
 class AnswerJSON: Codable {
@@ -53,40 +53,37 @@ class AnswerJSON: Codable {
 
 extension SurveyViewController {
     
-    func showNetworkFailure() {
-        let alert = UIAlertController(title: "Network Failure", message: "Unable to connect to Server", preferredStyle: .alert)
-        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
-        
-        alert.addAction(action)
-        present(alert, animated: true, completion: nil)
-    }
-
     @objc func handleRefresh() {
         print("handleRefresh")
         
-        var request: URLRequest = URLRequest(url: URL(fileURLWithPath: "/api/v1/survey", relativeTo: serverURL))
+        var request: URLRequest = URLRequest(url: URL(string: "/api/v1/survey", relativeTo: serverURL)!)
         request.httpMethod = "GET"
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
-            if let _ = error {
+            if let error = error {
+                print("### handleRefresh() NETWORK FAILURE:", error)
                 DispatchQueue.main.async {
                     // Network failure
-                    self.refresh.endRefreshing()
+                    self.refreshControl?.endRefreshing()
                     self.showNetworkFailure()
                 }
             } else if let httpResponse = response as? HTTPURLResponse {
+                DispatchQueue.main.async {
+                    self.refreshControl?.endRefreshing()
+                    self.emptyCoreData()
+                    
+                }
                 if httpResponse.statusCode == 200 { // 200 - Ok
                     DispatchQueue.main.async {
-                        self.refresh.endRefreshing()
-                        self.emptyCoreData()
-                        
+                        self.refreshControl?.endRefreshing()
+                        self.updateAllSurveys(data: data)
                     }
                     
                 } else if httpResponse.statusCode == 204 { // 204 - No Content
                     DispatchQueue.main.async {
-                        self.refresh.endRefreshing()
+                        self.refreshControl?.endRefreshing()
                         self.emptyCoreData()
                     }
                 }
@@ -94,6 +91,12 @@ extension SurveyViewController {
         })
         dataTask?.resume()
     }
-
     
+    func showNetworkFailure() {
+        let alert = UIAlertController(title: "Network Failure", message: "Unable to connect to Server", preferredStyle: .alert)
+        let action = UIAlertAction(title: "Ok", style: .default, handler: nil)
+        
+        alert.addAction(action)
+        present(alert, animated: true, completion: nil)
+    }
 }

@@ -11,14 +11,50 @@ import CoreData
 
 extension SurveyViewController {
     
+    func updateAllSurveys(data: Data?) {
+        guard let data = data else { return }
+        
+        let context: NSManagedObjectContext = persistentContainer.viewContext
+        // Step #1: Delete all surveys
+        emptyCoreData()
+        
+        // Step #2: Decode all the components
+        do {
+            for surveyjson in try JSONDecoder().decode([SurveyJSON].self, from: data) {
+                let entity: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Survey", in: context)!
+                let newSurvey: Survey = Survey(entity: entity, insertInto: context)
+                newSurvey.id = surveyjson._id
+                newSurvey.name = surveyjson.name
+            }
+        } catch let decodeJSONErr {
+            print("### updateAllSurveys() UNABLE TO DECODE CONTENT:", decodeJSONErr)
+        }
+
+        // Step #3: Save
+        do {
+            try context.save()
+        } catch let saveErr {
+            print("### updateAllSurveys() UNABLE TO SAVE DATA:", saveErr)
+        }
+    }
+    
     func emptyCoreData() {
         let context: NSManagedObjectContext = persistentContainer.viewContext
-        let deleteBatch: NSBatchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Survey.fetchRequest())
         
+        // PENDING: Something that works better
+//        let deleteBatch: NSBatchDeleteRequest = NSBatchDeleteRequest(fetchRequest: Survey.fetchRequest())
+//        do {
+//            try context.execute(deleteBatch)
+//        } catch let deleteBatchErr {
+//            print("### emptyCoreData() UNABLE TO BATCH DELETE ALL:", deleteBatchErr)
+//        }
+        let fetchRequest: NSFetchRequest<Survey> = NSFetchRequest(entityName: "Survey")
         do {
-            try context.execute(deleteBatch)
-        } catch let deleteBatchErr {
-            print("### emptyCoreData() UNABLE TO BATCH DELETE ALL:", deleteBatchErr)
+            for existingSurvey in try context.fetch(fetchRequest) {
+                context.delete(existingSurvey)
+            }
+        } catch let deleteErr {
+            print("### emptyCoreData() UNABLE TO DELETE:", deleteErr)
         }
     }
     

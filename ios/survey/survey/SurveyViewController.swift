@@ -28,15 +28,8 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
     
     // NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK
     //   NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK
-    let serverURL: URL? = URL(string: "survey-app-survey.cloudapps.maltron.solutionarchitectsredhat.com.br")
+    let serverURL: URL? = URL(string: "http://survey-app-survey.cloudapps.maltron.solutionarchitectsredhat.com.br")
     var dataTask: URLSessionDataTask!
-    
-    let refresh: UIRefreshControl = {
-        let refreshControl: UIRefreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
-
-        return refreshControl
-    }()
     
     let simulateSurvey: UIBarButtonItem = {
         let button: UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: .play, target: self, action: #selector(handleSimulateSurvey))
@@ -44,6 +37,8 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
         
         return button
     }()
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,13 +47,23 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
         setToolbarItems([simulateSurvey], animated: true)
         
         // Refresh: Fetch new data and insert into CoreData
-        self.refreshControl = refresh
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl?.attributedTitle = NSAttributedString(string: "Fetching Surveys Data")
+        self.refreshControl?.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
         
         navigationItem.title = "Surveys"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TheCell")
         
+        // TEMP
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "RESET", style: .plain, target: self, action: #selector(handleReset))
+        
         // Setup Core Data
         loadCoreData()
+    }
+    
+    // TEMP
+    @objc func handleReset() {
+        emptyCoreData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,8 +81,6 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
     @objc func handleSimulateSurvey() {
         print("handleSimulateSurvey")
     }
-    
-    
     
 }
 
