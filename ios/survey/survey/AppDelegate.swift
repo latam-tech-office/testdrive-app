@@ -19,7 +19,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().prefersLargeTitles = true
         
-        let viewController: UIViewController = SurveyViewController(style: .grouped)
+        let viewController: UIViewController = SurveyViewController(style: .plain)
 //        let viewController = SurveyViewController()
         let navigation: UINavigationController = UINavigationController(rootViewController: viewController)
         window?.rootViewController = navigation
