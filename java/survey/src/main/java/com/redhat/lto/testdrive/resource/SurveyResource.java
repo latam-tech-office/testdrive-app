@@ -20,13 +20,8 @@ package com.redhat.lto.testdrive.resource;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Sorts;
 import com.redhat.lto.testdrive.model.Survey;
-import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
