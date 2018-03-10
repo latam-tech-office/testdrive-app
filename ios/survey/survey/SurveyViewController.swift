@@ -37,8 +37,6 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
         
         return button
     }()
-    
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,16 +52,12 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
         navigationItem.title = "Surveys"
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "TheCell")
         
-        // TEMP
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "RESET", style: .plain, target: self, action: #selector(handleReset))
+        // Creating Surveys
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add
+            , target: self, action: #selector(handleAddSurvey))
         
         // Setup Core Data
         loadCoreData()
-    }
-    
-    // TEMP
-    @objc func handleReset() {
-        emptyCoreData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -76,6 +70,10 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
         super.viewWillDisappear(animated)
         
         navigationController?.isToolbarHidden = true
+    }
+    
+    @objc func handleAddSurvey() {
+        
     }
     
     @objc func handleSimulateSurvey() {
