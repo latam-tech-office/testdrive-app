@@ -28,7 +28,7 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
     
     // NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK
     //   NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK NETWORK
-    let serverURL: URL? = URL(string: "http://survey-app-survey.cloudapps.maltron.solutionarchitectsredhat.com.br")
+    let serverURL: URL? = URL(string: "http://survey-app-survey.cloudapps.nortlam.net")
     var dataTask: URLSessionDataTask!
     
     let simulateSurvey: UIBarButtonItem = {

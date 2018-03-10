@@ -15,10 +15,7 @@ extension SurveyViewController {
         guard let data = data else { return }
         
         let context: NSManagedObjectContext = persistentContainer.viewContext
-        // Step #1: Delete all surveys
-        emptyCoreData()
-        
-        // Step #2: Decode all the components
+        // Step #1: Decode all the components
         do {
             for surveyjson in try JSONDecoder().decode([SurveyJSON].self, from: data) {
                 let entity: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Survey", in: context)!
@@ -30,7 +27,7 @@ extension SurveyViewController {
             print("### updateAllSurveys() UNABLE TO DECODE CONTENT:", decodeJSONErr)
         }
 
-        // Step #3: Save
+        // Step #2: Save
         do {
             try context.save()
         } catch let saveErr {

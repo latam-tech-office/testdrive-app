@@ -70,6 +70,7 @@ extension SurveyViewController {
                     self.showNetworkFailure()
                 }
             } else if let httpResponse = response as? HTTPURLResponse {
+                // First, end refresh control
                 DispatchQueue.main.async {
                     self.refreshControl?.endRefreshing()
                     self.emptyCoreData()
