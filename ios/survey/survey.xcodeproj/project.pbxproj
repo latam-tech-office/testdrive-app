@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		22457E7A2053258F00F02B39 /* QuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22457E792053258F00F02B39 /* QuestionViewController.swift */; };
+		22457E7C20532B7900F02B39 /* QuestionViewController+CoreData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22457E7B20532B7900F02B39 /* QuestionViewController+CoreData.swift */; };
+		22457E7E20532F5100F02B39 /* SurveyDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22457E7D20532F5100F02B39 /* SurveyDetailViewController.swift */; };
 		22B514EA205170E9006C88AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B514E9205170E9006C88AB /* AppDelegate.swift */; };
 		22B514EC205170E9006C88AB /* SurveyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22B514EB205170E9006C88AB /* SurveyViewController.swift */; };
 		22B514F1205170E9006C88AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22B514F0205170E9006C88AB /* Assets.xcassets */; };
@@ -18,6 +21,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		22457E792053258F00F02B39 /* QuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionViewController.swift; sourceTree = "<group>"; };
+		22457E7B20532B7900F02B39 /* QuestionViewController+CoreData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "QuestionViewController+CoreData.swift"; sourceTree = "<group>"; };
+		22457E7D20532F5100F02B39 /* SurveyDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SurveyDetailViewController.swift; path = survey/coredata/SurveyDetailViewController.swift; sourceTree = SOURCE_ROOT; };
 		22B514E6205170E9006C88AB /* survey.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = survey.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22B514E9205170E9006C88AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22B514EB205170E9006C88AB /* SurveyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SurveyViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +72,7 @@
 				22E22E9B2051744B00DE6CC2 /* coredata */,
 				22B514E9205170E9006C88AB /* AppDelegate.swift */,
 				22B514EB205170E9006C88AB /* SurveyViewController.swift */,
+				22457E792053258F00F02B39 /* QuestionViewController.swift */,
 				22B514F0205170E9006C88AB /* Assets.xcassets */,
 				22B514F2205170E9006C88AB /* LaunchScreen.storyboard */,
 				22B514F5205170E9006C88AB /* Info.plist */,
@@ -78,6 +85,7 @@
 			children = (
 				22E22E9C2051745A00DE6CC2 /* survey.xcdatamodeld */,
 				22E22EC02052CC0400DE6CC2 /* SurveyViewController+CoreData.swift */,
+				22457E7B20532B7900F02B39 /* QuestionViewController+CoreData.swift */,
 			);
 			path = coredata;
 			sourceTree = "<group>";
@@ -85,6 +93,7 @@
 		22E22E9F2051758200DE6CC2 /* cell */ = {
 			isa = PBXGroup;
 			children = (
+				22457E7D20532F5100F02B39 /* SurveyDetailViewController.swift */,
 			);
 			path = cell;
 			sourceTree = "<group>";
@@ -178,8 +187,11 @@
 			files = (
 				22E22EC72052D3B600DE6CC2 /* SurveyViewController+Networking.swift in Sources */,
 				22E22EC42052D1E900DE6CC2 /* SurveyViewController+TableView.swift in Sources */,
+				22457E7A2053258F00F02B39 /* QuestionViewController.swift in Sources */,
+				22457E7E20532F5100F02B39 /* SurveyDetailViewController.swift in Sources */,
 				22B514EC205170E9006C88AB /* SurveyViewController.swift in Sources */,
 				22E22EC12052CC0400DE6CC2 /* SurveyViewController+CoreData.swift in Sources */,
+				22457E7C20532B7900F02B39 /* QuestionViewController+CoreData.swift in Sources */,
 				22E22E9E2051745A00DE6CC2 /* survey.xcdatamodeld in Sources */,
 				22B514EA205170E9006C88AB /* AppDelegate.swift in Sources */,
 			);

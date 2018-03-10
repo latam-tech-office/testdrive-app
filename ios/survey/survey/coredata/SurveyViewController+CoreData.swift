@@ -18,10 +18,28 @@ extension SurveyViewController {
         // Step #1: Decode all the components
         do {
             for surveyjson in try JSONDecoder().decode([SurveyJSON].self, from: data) {
-                let entity: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Survey", in: context)!
-                let newSurvey: Survey = Survey(entity: entity, insertInto: context)
+                let entitySurvey: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Survey", in: context)!
+                let newSurvey: Survey = Survey(entity: entitySurvey, insertInto: context)
                 newSurvey.id = surveyjson._id
                 newSurvey.name = surveyjson.name
+                
+                // Questions
+                for questionjson in surveyjson.questions {
+                    let entityQuestion: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Question", in: context)!
+                    let newQuestion: Question = Question(entity: entityQuestion, insertInto: context)
+                    newQuestion.order = Int16(questionjson.order)
+                    newQuestion.question = questionjson.question
+                    newQuestion.type = questionjson.type.rawValue
+                    
+                    // Answers
+                    for answerjson in questionjson.answers {
+                        let entityAnswer: NSEntityDescription = NSEntityDescription.entity(forEntityName: "Answer", in: context)!
+                        let newAnswer: Answer = Answer(entity: entityAnswer, insertInto: context)
+                        newAnswer.order = Int16(answerjson.order)
+                        newAnswer.answer = answerjson.answer
+                    }
+                }
+                
             }
         } catch let decodeJSONErr {
             print("### updateAllSurveys() UNABLE TO DECODE CONTENT:", decodeJSONErr)
