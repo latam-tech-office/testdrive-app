@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-extension SurveyViewController {
+extension SurveysViewController {
 
 //    override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
 //        let headerView = view as! UITableViewHeaderFooterView

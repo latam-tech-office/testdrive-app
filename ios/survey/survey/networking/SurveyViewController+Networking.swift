@@ -51,10 +51,11 @@ class AnswerJSON: Codable {
     }
 }
 
-extension SurveyViewController {
+extension SurveysViewController {
     
     @objc func handleRefresh() {
-        print("handleRefresh")
+        print(">>> handleRefresh()")
+        network(busy: true)
         
         var request: URLRequest = URLRequest(url: URL(string: "/api/v1/survey", relativeTo: serverURL)!)
         request.httpMethod = "GET"
@@ -62,31 +63,24 @@ extension SurveyViewController {
         
         dataTask?.cancel()
         dataTask = URLSession.shared.dataTask(with: request, completionHandler: { (data, response, error) in
+            // End of activity indicators
+            DispatchQueue.main.async {
+                self.network(busy: false)
+                self.emptyCoreData()
+            }
+            
+            // Step #2: Process the information fetched from Server
             if let error = error {
                 print("### handleRefresh() NETWORK FAILURE:", error)
-                DispatchQueue.main.async {
-                    // Network failure
-                    self.refreshControl?.endRefreshing()
-                    self.showNetworkFailure()
-                }
             } else if let httpResponse = response as? HTTPURLResponse {
-                // First, end refresh control
-                DispatchQueue.main.async {
-                    self.refreshControl?.endRefreshing()
-                    self.emptyCoreData()
-                    
-                }
                 if httpResponse.statusCode == 200 { // 200 - Ok
                     DispatchQueue.main.async {
-                        self.refreshControl?.endRefreshing()
                         self.updateAllSurveys(data: data)
                     }
                     
                 } else if httpResponse.statusCode == 204 { // 204 - No Content
-                    DispatchQueue.main.async {
-                        self.refreshControl?.endRefreshing()
-                        self.emptyCoreData()
-                    }
+                    // NO CODE NEEDED
+                    // Leaving this line to be aware of possible Status Code 204
                 }
             }
         })
@@ -99,5 +93,14 @@ extension SurveyViewController {
         
         alert.addAction(action)
         present(alert, animated: true, completion: nil)
+    }
+    
+    func network(busy: Bool) {
+        if busy {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        } else {
+            UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            self.refreshControl?.endRefreshing()
+        }
     }
 }

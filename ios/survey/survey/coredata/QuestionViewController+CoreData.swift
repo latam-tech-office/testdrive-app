@@ -8,7 +8,7 @@
 
 import CoreData
 
-extension QuestionViewController {
+extension QuestionsViewController {
     
     func loadCoreData() {
         // Step 1: Prepare key variables

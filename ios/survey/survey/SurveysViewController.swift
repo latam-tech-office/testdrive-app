@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class SurveyViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class SurveysViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
     // CORE DATA CORE DATA CORE DATA CORE DATA CORE DATA CORE DATA CORE DATA
     //   CORE DATA CORE DATA CORE DATA CORE DATA CORE DATA CORE DATA CORE DATA
@@ -73,7 +73,10 @@ class SurveyViewController: UITableViewController, NSFetchedResultsControllerDel
     }
     
     @objc func handleAddSurvey() {
+        print(">>> SurveysViewController.handleAddSurvey()")
         
+        let viewController = SurveyTitleViewController()        
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc func handleSimulateSurvey() {

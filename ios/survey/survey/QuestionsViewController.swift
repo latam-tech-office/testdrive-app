@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class QuestionViewController: UITableViewController, NSFetchedResultsControllerDelegate {
+class QuestionsViewController: UITableViewController, NSFetchedResultsControllerDelegate {
     
     weak var context: NSManagedObjectContext!
     var fetchedResultsController: NSFetchedResultsController<Question>!

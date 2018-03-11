@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-extension SurveyViewController {
+extension SurveysViewController {
     
     func updateAllSurveys(data: Data?) {
         guard let data = data else { return }

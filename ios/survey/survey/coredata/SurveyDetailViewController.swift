@@ -8,6 +8,6 @@
 
 import UIKit
 
-class SurveyDetailViewController: UITableViewController {
+class SurveysDetailViewController: UITableViewController {
     
 }
