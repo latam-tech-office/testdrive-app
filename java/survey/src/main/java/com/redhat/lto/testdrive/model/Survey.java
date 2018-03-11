@@ -61,12 +61,17 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
     @XmlElement(name = TAG_QUESTIONS, nillable = false, required = true)
     private Question[] questions;
     
+    public static final String TAG_NUMBER_OF_QUESTIONS = "numberOfQuestions";
+    @XmlElement(name = TAG_NUMBER_OF_QUESTIONS, nillable = false, required = true)
+    private int numberOfQuestions;
+    
     public Survey() {
     }
 
     public Survey(String name, Question[] questions) {
         this.name = name;
         this.questions = questions;
+        this.numberOfQuestions = questions != null ? questions.length : 0;
     }
 
     public ObjectId getID() {
@@ -93,12 +98,21 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
         this.questions = questions;
     }
 
+    public int getNumberOfQuestions() {
+        return numberOfQuestions;
+    }
+
+    public void setNumberOfQuestions(int numberOfQuestions) {
+        this.numberOfQuestions = numberOfQuestions;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.ID);
-        hash = 97 * hash + Objects.hashCode(this.name);
-        hash = 97 * hash + Arrays.deepHashCode(this.questions);
+        hash = 53 * hash + Objects.hashCode(this.ID);
+        hash = 53 * hash + Objects.hashCode(this.name);
+        hash = 53 * hash + Arrays.deepHashCode(this.questions);
+        hash = 53 * hash + this.numberOfQuestions;
         return hash;
     }
 
@@ -114,6 +128,9 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
             return false;
         }
         final Survey other = (Survey) obj;
+        if (this.numberOfQuestions != other.numberOfQuestions) {
+            return false;
+        }
         if (!Objects.equals(this.name, other.name)) {
             return false;
         }
@@ -125,6 +142,7 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
         }
         return true;
     }
+
     
     @Override
     public String toString() {
@@ -140,7 +158,8 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
     public JsonObjectBuilder toJSON() {
         JsonObjectBuilder builder = Json.createObjectBuilder();
         if(this.ID != null) builder.add(TAG_ID, this.ID.toHexString());
-        builder.add(TAG_NAME, this.name);
+        builder.add(TAG_NAME, this.name)
+               .add(TAG_NUMBER_OF_QUESTIONS, this.numberOfQuestions);
         
         if(this.questions != null && this.questions.length > 0) {
             JsonArrayBuilder array = Json.createArrayBuilder();
@@ -155,10 +174,12 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
     //   MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO TYPE MONGO    
     /**
      * Convert a object into a Mongo's DOcument */
+    @Override
     public Document toDocument() {
         Document document = new Document();
         if(this.ID != null) document.append(TAG_ID, this.ID);
-        document.append(TAG_NAME, this.name);
+        document.append(TAG_NAME, this.name)
+                .append(TAG_NUMBER_OF_QUESTIONS, this.numberOfQuestions);
         
         if(this.questions != null && this.questions.length > 0) {
             List<Document> arrayQuestions = new ArrayList<>(this.questions.length);
@@ -170,10 +191,13 @@ public class Survey implements Serializable, JSON, MongoType<Survey> {
     }
 
     /**
-     * Returns a object based on a Document */
+     * Returns a object based on a Document
+     * @param document */
+    @Override
     public void fromDocument(Document document) {
         this.ID = document.getObjectId(TAG_ID);
         this.name = document.getString(TAG_NAME);
+        this.numberOfQuestions = document.getInteger(TAG_NUMBER_OF_QUESTIONS, 0);
         
         List<Document> arrayQuestions = (List<Document>)document.get(TAG_QUESTIONS);
         if(arrayQuestions != null && !arrayQuestions.isEmpty()) {

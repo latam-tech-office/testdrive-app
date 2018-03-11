@@ -24,8 +24,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 /**
- *
- * @author mauricio
+ * Testing a specific Survey Object
+ * 
+ * @author Mauricio "Maltron" Leal <maltron at redhat dot com>
  */
 public class SurveyTest {
     
@@ -50,24 +51,38 @@ public class SurveyTest {
     
     @Test
     public void testInstanceCreation() {
+               
+        Question question1 = new Question(1, 
+                "What is your experience with Container technology ?", 
+                QuestionType.SINGLE, new Answer[] {
+            new Answer(1, "Experienced"),
+            new Answer(2, "Just playing"),
+            new Answer(3, "I heard about it"),
+            new Answer(4, "Never heard of it")
+        });
+        Question question2 = new Question(2,
+                "What container technology are you using currently ?", 
+                QuestionType.MULTIPLE, new Answer[] {
+            new Answer(1, "Docker"),
+            new Answer(2, "Rocket"),
+            new Answer(3, "CRI-O")
+        });
+        Question question3 = new Question(3,
+                "What do you consider the most important ?", 
+                QuestionType.RANK, new Answer[] {
+            new Answer(1, "Knowledge"),
+            new Answer(2, "Experience"),
+            new Answer(3, "Having a specialist around"),
+        });
+        System.out.printf(">>> Question 3: %s\n", question3);
+        Question question4 = new Question(4,
+                "Please tell us where we should improve", 
+                QuestionType.OPEN);
         
-        Answer answer1 = new Answer(1, "John");
-        Answer answer2 = new Answer(2, "Melany");
-        Answer answer3 = new Answer(3, "Paul");
-        Question question1 = new Question(1, "What is your name ?", QuestionType.SINGLE,
-            new Answer[] {answer1, answer2, answer3});
         
         
-        Answer answer4 = new Answer(1, "Male");
-        Answer answer5 = new Answer(2, "Female");
-        Question question2 = new Question(2, "What is your sex ?", QuestionType.RANK,
-                new Answer[] {answer4, answer5});
-        
-        Survey survey = new Survey("Basic Question", new Question[] { question1, question2 });
-        
-        
-        System.out.printf(">>> Answer 1: %s\n", answer1.toString());
-        System.out.printf(">>> Question1: %s\n", question1);
+        Survey survey = new Survey("TestDrive OpenShift", new Question[] { 
+            question1, question2, question3, question4 });
         System.out.printf(">>> Survey: %s\n", survey);
     }
 

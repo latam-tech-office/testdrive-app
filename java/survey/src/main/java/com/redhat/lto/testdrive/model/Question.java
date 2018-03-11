@@ -63,6 +63,9 @@ public class Question implements Serializable, JSON, MongoType<Question> {
 
     public Question() {
     }
+    public Question(int order, String question, QuestionType type) {
+        this(order, question, type, null);
+    }
 
     public Question(int order, String question, QuestionType type, Answer[] answers) {
         this.order = order;
