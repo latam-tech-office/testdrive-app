@@ -51,38 +51,43 @@ public class SurveyTest {
     
     @Test
     public void testInstanceCreation() {
-               
-        Question question1 = new Question(1, 
-                "What is your experience with Container technology ?", 
-                QuestionType.SINGLE, new Answer[] {
-            new Answer(1, "Experienced"),
-            new Answer(2, "Just playing"),
-            new Answer(3, "I heard about it"),
-            new Answer(4, "Never heard of it")
-        });
-        Question question2 = new Question(2,
-                "What container technology are you using currently ?", 
-                QuestionType.MULTIPLE, new Answer[] {
-            new Answer(1, "Docker"),
-            new Answer(2, "Rocket"),
-            new Answer(3, "CRI-O")
-        });
-        Question question3 = new Question(3,
-                "What do you consider the most important ?", 
-                QuestionType.RANK, new Answer[] {
-            new Answer(1, "Knowledge"),
-            new Answer(2, "Experience"),
-            new Answer(3, "Having a specialist around"),
-        });
-        System.out.printf(">>> Question 3: %s\n", question3);
-        Question question4 = new Question(4,
-                "Please tell us where we should improve", 
-                QuestionType.OPEN);
         
-        
+        Survey one = new Survey("One", new Question[] {
+            new Question(1, "First question ?", QuestionType.SINGLE, new Answer[] {
+                new Answer(1, "First Answer"),
+                new Answer(2, "Second Answer")
+            }),
+            new Question(2, "Second question ?", QuestionType.MULTIPLE, new Answer[] {
+                new Answer(1, "First Answer"),
+                new Answer(2, "Second Answer")
+            })
+        });
+        System.out.printf(">>> One:  %s\n", one);
         
         Survey survey = new Survey("TestDrive OpenShift", new Question[] { 
-            question1, question2, question3, question4 });
+            new Question(1, "What is your experience with Container technology ?", 
+                QuestionType.SINGLE, new Answer[] {
+                    new Answer(1, "Experienced"),
+                    new Answer(2, "Just playing"),
+                    new Answer(3, "I heard about it"),
+                    new Answer(4, "Never heard of it")
+                }),
+            new Question(2, "What container technology are you using currently ?", 
+                QuestionType.MULTIPLE, new Answer[] {
+                    new Answer(1, "Docker"),
+                    new Answer(2, "Rocket"),
+                    new Answer(3, "CRI-O")
+                }),
+            new Question(3, "What do you consider the most important ?", 
+                QuestionType.RANK, new Answer[] {
+                    new Answer(1, "Knowledge"),
+                    new Answer(2, "Experience"),
+                    new Answer(3, "Having a specialist around"),
+            }),
+            new Question(4,
+                "Please tell us where we should improve", 
+                QuestionType.OPEN)            
+        });
         System.out.printf(">>> Survey: %s\n", survey);
     }
 
