@@ -19,9 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         UINavigationBar.appearance().prefersLargeTitles = true
         
-        let viewController = SurveyViewController()
-        let navigation = UINavigationController(rootViewController: viewController)
-        window?.rootViewController = navigation
+        let surveyViewController = SurveyViewController()
+        window?.rootViewController = UINavigationController(rootViewController: surveyViewController)
         window?.makeKeyAndVisible()
         
         return true
